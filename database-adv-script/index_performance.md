@@ -48,23 +48,22 @@ CREATE INDEX idx_reviews_property_id ON reviews(property_id);
 ### Sample Query
 
 ```sql
-EXPLAIN SELECT * FROM bookings WHERE user_id = 2;
+EXPLAIN ANALYZE SELECT * FROM bookings WHERE user_id = 2;
+```
+
+### Sample Join Query
+
+```sql
+EXPLAIN ANALYZE
+SELECT users.name, bookings.start_date
+FROM users
+JOIN bookings ON users.id = bookings.user_id;
 ```
 
 ### Results
 
 * **Before Indexing**: Full table scan (high cost)
 * **After Indexing**: Index scan on `bookings.user_id` (lower cost)
-
-### Sample Join Query
-
-```sql
-EXPLAIN SELECT users.name, bookings.start_date FROM users
-JOIN bookings ON users.id = bookings.user_id;
-```
-
-* **Before**: Nested loop with sequential scan
-* **After**: Nested loop with index scan on `bookings_user_id`
 
 ---
 
