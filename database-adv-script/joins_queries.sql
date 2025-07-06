@@ -21,7 +21,8 @@ SELECT
   reviews.comment
 FROM
   properties
-LEFT JOIN reviews ON reviews.property_id = properties.id;
+LEFT JOIN reviews ON reviews.property_id = properties.id
+ORDER BY properties.id;
 
 
 -- FULL OUTER JOIN: Retrieve all users and all bookings, even if the user has no booking or a booking is not linked to a user
