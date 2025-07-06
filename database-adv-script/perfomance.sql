@@ -13,7 +13,8 @@ FROM
   bookings b
 JOIN users u ON b.user_id = u.id
 JOIN properties p ON b.property_id = p.id
-JOIN payments pay ON b.id = pay.booking_id;
+JOIN payments pay ON b.id = pay.booking_id
+AND pay.status = 'completed';
 
 -- Analyze initial performance
 EXPLAIN ANALYZE
@@ -31,7 +32,8 @@ FROM
   bookings b
 JOIN users u ON b.user_id = u.id
 JOIN properties p ON b.property_id = p.id
-JOIN payments pay ON b.id = pay.booking_id;
+JOIN payments pay ON b.id = pay.booking_id
+AND pay.status = 'completed';
 
 -- Refactored query (assumes indexes exist on booking.user_id, booking.property_id, payments.booking_id)
 -- Optional WHERE clause or filtered join for real-case performance gains
@@ -50,7 +52,8 @@ FROM
 JOIN users u ON b.user_id = u.id
 JOIN properties p ON b.property_id = p.id
 LEFT JOIN payments pay ON pay.booking_id = b.id
-WHERE b.start_date >= '2023-01-01'; -- optional filter to reduce scanned rows
+WHERE b.start_date >= '2023-01-01'
+AND pay.status = 'completed';
 
 -- Re-analyze refactored version
 EXPLAIN ANALYZE
@@ -69,4 +72,5 @@ FROM
 JOIN users u ON b.user_id = u.id
 JOIN properties p ON b.property_id = p.id
 LEFT JOIN payments pay ON pay.booking_id = b.id
-WHERE b.start_date >= '2023-01-01';
+WHERE b.start_date >= '2023-01-01'
+AND pay.status = 'completed';
